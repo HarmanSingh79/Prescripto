@@ -12,7 +12,9 @@ const Footer = () => {
                 {/* left section  */}
                 <div>
                     <img className='mb-5 w-40' src={assets.logo} alt="" />
-                    <p className='w-full md:w-2/3 text-gray-600 leading-6 '>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis totam beatae aliquid doloribus dignissimos ipsam quam blanditiis quod exercitationem explicabo nisi fugiat saepe illo nobis, neque inventore mollitia, ipsa dolor ad quae voluptas. Quasi esse est, error quis possimus minima ut pariatur ratione.</p>
+                    <p className='w-full md:w-2/3 text-gray-600 leading-6 '>Prescripto makes it simple to find trusted doctors and book appointments online.
+                        We connect patients with verified specialists across a range of fields, so you can
+                        manage your healthcare with confidence — anytime, anywhere.</p>
                 </div>
 
                 {/* middle section  */}
@@ -20,8 +22,8 @@ const Footer = () => {
                     <p className='text-xl font-medium mb-5'>COMPANY</p>
                     <ul className='flex flex-col gap-2 text-gray-600'>
                         <li className='cursor-pointer' onClick={() => { navigate('/'); scrollTo(0, 0) }}>Home</li>
-                        <li onClick={()=>{navigate("/about");scrollTo(0,0)}} className='cursor-pointer'>About Us</li>
-                        <li onClick={()=>{navigate("/contact");scrollTo(0,0)}}className='cursor-pointer'>Contact Us</li>
+                        <li onClick={() => { navigate("/about"); scrollTo(0, 0) }} className='cursor-pointer'>About Us</li>
+                        <li onClick={() => { navigate("/contact"); scrollTo(0, 0) }} className='cursor-pointer'>Contact Us</li>
                         <li className='cursor-pointer'>Privacy Policy</li>
                     </ul>
                 </div>
@@ -37,7 +39,7 @@ const Footer = () => {
 
             {/* Copyright text */}
             <div>
-                <hr className='text-gray-400'/>
+                <hr className='text-gray-400' />
                 <p className='py-5 text-center text-sm'>Copyright &copy; {new Date().getFullYear()} Prescripto - All rights reserved</p>
             </div>
         </div>
