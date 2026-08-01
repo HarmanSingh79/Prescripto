@@ -16,7 +16,15 @@ connectCloudinary()
 
 //middlewares
 app.use(express.json())
-app.use(cors()) //allows to connect frontend with the backend
+
+//allows to connect frontend with the backend
+app.use(cors({
+  origin: [
+    "https://prescripto-by-harman.vercel.app",
+    "https://prescripto-admin-harman.vercel.app"
+  ],
+  credentials: true
+})) 
 
 //API endpoints
 app.use("/api/admin",adminRouter)
