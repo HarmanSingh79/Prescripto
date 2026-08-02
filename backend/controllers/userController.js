@@ -6,9 +6,9 @@ import { v2 as cloudinary } from "cloudinary"
 import doctorModel from "../models/doctorModel.js"
 import appointmentModel from '../models/appointmentModel.js'
 import razorpay from 'razorpay'
+import transporter from "../config/nodemailer.js"
 
 //api to register user
-
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body
@@ -67,6 +67,81 @@ const loginUser = async (req, res) => {
         } else {
             res.json({ success: false, message: "Invalid credentials" })
         }
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+//api to send otp for email verification
+const sendVerifyOTP = async (req, res) => {
+    try {
+        const userId = req.userId
+        const user = await userModel.findById(userId)
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found!" })
+        }
+
+        if (user.isAccountVerified) {
+            return res.json({ success: false, message: "Account alredy verified!" })
+        }
+
+        const otp = String(Math.floor(100000 + Math.random() * 900000))
+
+        user.verifyOtp = otp
+        user.verifyOtpExpiresAt = Date.now() + 10 * 60 * 1000 //for 10 minutes
+        await user.save()
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.email,
+            subject: 'Verify your Email - Prescripto',
+            text: `Your OTP is ${otp}. It is valid for 10 minutes.`
+        }
+
+        await transporter.sendMail(mailOptions)
+
+        res.json({ success: true, message: "OTP sent to your email" })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+//api to verify the otp
+const verifyEmail = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { otp } = req.body
+
+        if (!userId || !otp) {
+            return res.json({ success: false, message: "Missing details" })
+        }
+
+        const user = await userModel.findById(userId)
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found" })
+        }
+
+        if (user.verifyOtp === '' || user.verifyOtp !== otp) {
+            return res.json({ success: false, message: "Invalid OTP" })
+        }
+
+        if (user.verifyOtpExpiresAt < Date.now()) {
+            return res.json({ success: false, message: "OTP expired!" })
+        }
+
+        user.isAccountVerified = true;
+        user.verifyOtp = ''
+        user.verifyOtpExpiresAt = 0
+
+        await user.save()
+
+        res.json({ success: true, message: "Email verified successfully" })
 
     } catch (error) {
         console.log(error)
@@ -234,26 +309,26 @@ const paymentRazorpay = async (req, res) => {
 
         //creating order 
         const order = await razorpayInstance.orders.create(options)
-        res.json({ success: true, order})
-    }catch(error){
+        res.json({ success: true, order })
+    } catch (error) {
         console.log(error)
         res.json({ success: false, message: error.message })
     }
 }
 
 //api to verify razorpay payment
-const verifyRazorpay=async(req,res)=>{
+const verifyRazorpay = async (req, res) => {
     try {
-        const {razorpay_order_id}=req.body
-        const orderInfo=await razorpayInstance.orders.fetch(razorpay_order_id)
+        const { razorpay_order_id } = req.body
+        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
 
         console.log(orderInfo)
 
-        if(orderInfo.status=='paid'){
-            await appointmentModel.findByIdAndUpdate(orderInfo.receipt,{payment:true})
-            res.json({success:true, message:"Payment Successful"})
-        }else{
-            res.json({success:false, message:"Payment failed"})
+        if (orderInfo.status == 'paid') {
+            await appointmentModel.findByIdAndUpdate(orderInfo.receipt, { payment: true })
+            res.json({ success: true, message: "Payment Successful" })
+        } else {
+            res.json({ success: false, message: "Payment failed" })
         }
 
     } catch (error) {
@@ -263,4 +338,4 @@ const verifyRazorpay=async(req,res)=>{
 }
 
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay }
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP }

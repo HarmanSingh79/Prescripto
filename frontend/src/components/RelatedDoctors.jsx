@@ -21,7 +21,7 @@ const RelatedDoctors = ({ docId, speciality }) => {
             <h1 className='text-3xl font-medium'>Top Doctors To Book</h1>
             <p className='text-sm text-center sm:w-1/3'>Simply browse through our extensive list of trusted doctors.</p>
             <div className='grid grid-cols-auto w-full gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
-                {relDoc.slice(0, 5).map((item, index) => (
+                {relDoc.slice(0, 3).map((item, index) => (
                     <div onClick={() => { navigate(`/appointment/${item._id}`); scrollTo(0, 0) }} key={index} className='border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-2.5 transition-all duration-400'>
                         <img className='bg-blue-50' src={item.image} alt="" />
                         <div className='p-4'>

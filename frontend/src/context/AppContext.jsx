@@ -42,6 +42,38 @@ const AppContextProvider = (props) => {
         }
     }
 
+    const sendVerifyOtp = async () => {
+        try {
+            const { data } = await axios.post(backendURL + '/api/user/send-verify-otp',{},{ headers: { token } })
+            if (data.success) {
+                toast.success(data.message)
+                return true
+            } else {
+                toast.error(data.message)
+                return false
+            }
+        } catch (error) {
+            toast.error(error.message)
+            return false
+        }
+    }
+
+    const verifyEmail = async (otp) => {
+        try {
+            const { data } = await axios.post(backendURL + '/api/user/verify-account',{ otp },{ headers: { token } })
+            if (data.success) {
+                toast.success(data.message)
+                return true
+            } else {
+                toast.error(data.message)
+                return false
+            }
+        } catch (error) {
+            toast.error(error.message)
+            return false
+        }
+    }
+
     useEffect(() => {
         getDoctorsData()
     }, [])
@@ -60,7 +92,9 @@ const AppContextProvider = (props) => {
         token, setToken,
         backendURL,
         userData, setUserData,
-        loadUserProfileData
+        loadUserProfileData,
+        sendVerifyOtp,
+        verifyEmail
     }
 
     return (

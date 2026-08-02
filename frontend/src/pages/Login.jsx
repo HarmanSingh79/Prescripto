@@ -25,6 +25,7 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem('token', data.token)
           setToken(data.token)
+          navigate('/verify-email')
         } else {
           toast.error(data.message)
         }
@@ -33,6 +34,7 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem('token', data.token)
           setToken(data.token)
+          navigate('/')
         } else {
           toast.error(data.message)
         }
@@ -46,7 +48,7 @@ const Login = () => {
     if (token) {
       navigate("/")
     }
-  }, [token])
+  }, [])
 
 
   return (
