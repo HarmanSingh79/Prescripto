@@ -143,4 +143,4 @@ This project is open source and available for learning purposes.
 
 ## Contact
 
-For questions or feedback, reach out at [your email here].
+For questions or feedback, reach out at harmansinghnew1@gmail.com
