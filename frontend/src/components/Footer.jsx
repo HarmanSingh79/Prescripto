@@ -1,8 +1,18 @@
 import React from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify"
 
 const Footer = () => {
+
+    const copyToClipboard = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text)
+            toast.success("Copied successfully!")
+        } catch (error) {
+            toast.error("Could not copy")
+        }
+    }
 
     const navigate = useNavigate()
     return (
@@ -27,12 +37,27 @@ const Footer = () => {
                         <li className='cursor-pointer'>Privacy Policy</li>
                     </ul>
                 </div>
+
                 {/* right section  */}
                 <div>
                     <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
                     <ul className='flex flex-col gap-2 text-gray-600'>
-                        <li className='cursor-pointer'>0164-291-2586</li>
-                        <li className='cursor-pointer'>prescriptobyharman@gmail.com</li>
+                        <li> <a href="tel:+919876543210" onClick={(e) => {
+                            if (window.innerWidth > 768) {
+                                e.preventDefault()
+                                copyToClipboard('0164-291-2586')
+                            }
+                        }} className='cursor-pointer hover:text-black'>
+                            0164-291-2586
+                        </a></li>
+                        <li className='cursor-pointer'><a onClick={()=>copyToClipboard('prescriptobyharman@gmail.com')}
+                            href="https://mail.google.com/mail/?view=cm&fs=1&to=prescriptobyharman@gmail.com&su=Inquiry&body=Hello,"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className='hover:text-black cursor-pointer'
+                        >
+                            prescriptobyharman@gmail.com
+                        </a></li>
                     </ul>
                 </div>
             </div>

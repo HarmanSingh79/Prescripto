@@ -47,27 +47,27 @@ const DoctorProfile = () => {
       <div className='flex flex-col gap-4 m-5'>
 
         <div>
-          <img className='bg-primary/80 w-full sm:max-w-64 rounded-lg' src={profileData.image} alt="" />
+          <img className='bg-primary/80 w-full max-sm:max-w-50 sm:max-w-64 rounded-lg' src={profileData.image} alt="" />
         </div>
 
-        <div className='flex-1 border border-stone-300 rounded-lg p-8 py-7 bg-white'>
+        <div className='flex-1 border border-stone-300 rounded-lg max-sm:p-3 p-8 max-sm:py-3 py-7 bg-white'>
           {/* doctor information flex gap-2*/}
-          <p className='items-center text-3xl font-medium text-gray-700 '>{profileData.name}</p>
+          <p className='items-center text-3xl font-medium text-gray-700 max-sm:text-lg'>{profileData.name}</p>
 
-          <div className='flex items-center gap-2 mt-1 text-gray-600'>
+          <div className='flex items-center gap-2 mt-1 text-gray-600 max-sm:text-xs'>
             <p>{profileData.degree} - {profileData.speciality}</p>
-            <button className='py-0.5 px-2 border text-xs rounded-full border-gray-400'>{profileData.experience}</button>
+            <button className='max-sm:py-0 max-sm:px-1 py-0.5 px-2 border max-sm:text-[9px] text-xs rounded-full border-gray-400'>{profileData.experience}</button>
           </div>
 
           {/* doctor's about flex gap-1 */}
           <div>
             <p className='items-center text-sm font-medium text-neutal-800 mt-3'>About</p>
-            <p className='text-sm text-gray-600 max-w-[700px] mt-1'>{profileData.about}</p>
+            <p className='text-sm text-gray-600 max-w-175 mt-1'>{profileData.about}</p>
           </div>
 
-          <p className='text-gray-600 font-medium mt-4'>Appointment Fees: <span className='text-gray-800'>{currency}{edit ? <input value={profileData.fees} type="number" onChange={(e)=>setProfileData(prev=>({...prev, fees:e.target.value}))}></input> : profileData.fees}</span></p>
+          <p className='text-gray-600 font-medium mt-4 max-sm:text-[15px]'>Appointment Fees: <span className='text-gray-800'>{currency}{edit ? <input value={profileData.fees} type="number" onChange={(e)=>setProfileData(prev=>({...prev, fees:e.target.value}))}></input> : profileData.fees}</span></p>
 
-          <div className='flex gap-2 py-2'>
+          <div className='flex gap-2 py-2 max-sm:text-sm'>
             <p>Address:</p>
             <div className='text-sm'>
               <p>{edit ? <input value={profileData.address.line1} type="text" onChange={(e)=>setProfileData(prev=>({...prev, address:{...prev.address, line1:e.target.value}}))}/> : profileData.address.line1}</p>
@@ -76,7 +76,7 @@ const DoctorProfile = () => {
 
           </div>
 
-          <div className='flex gap-1 pt-2'>
+          <div className='flex gap-1 pt-2 max-sm:text-sm'>
             <input onChange={()=>edit && setProfileData(prev=>({...prev, available:!prev.available}))} checked={profileData.available} type="checkbox" name="" id="" />
             <label htmlFor="">Available</label>
           </div>
@@ -84,8 +84,8 @@ const DoctorProfile = () => {
 
           {
             edit
-            ? <button onClick={updateProfile} className='px-4 py-1 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Save</button>
-            : <button onClick={()=>setEdit(true)} className='px-4 py-1 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Edit</button>
+            ? <button onClick={updateProfile} className='max-sm:text-xs max-sm:py-0.5 max-sm:px-4.5 px-4 py-1 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Save</button>
+            : <button onClick={()=>setEdit(true)} className='max-sm:text-xs max-sm:py-0.5 max-sm:px-4.5 px-4 py-1 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Edit</button>
           }        
 
         </div>

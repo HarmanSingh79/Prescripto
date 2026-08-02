@@ -16,38 +16,38 @@ const Dashboard = () => {
   }, [aToken])
 
   return dashData && (
-    <div className='m-5'>
-      <div className='flex flex-wrap gap-3'>
+    <div className='m-5 max-sm:m-3'>
+      <div className='flex flex-wrap max-sm:gap-2 gap-3 max-sm:justify-center'>
 
-        <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-          <img className='w-14' src={assets.doctor_icon} alt="" />
+        <div className='max-sm:min-w-[70vw] flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
+          <img className='w-14 max-sm:w-10' src={assets.doctor_icon} alt="" />
           <div>
-            <p className='text-xl font-semibold text-gray-600'>{dashData.doctors}</p>
-            <p className='text-gray-400'>Doctors</p>
+            <p className='text-xl font-semibold text-gray-600 max-sm:text-sm'>{dashData.doctors}</p>
+            <p className='text-gray-400 max-sm:text-[15px]'>Doctors</p>
           </div>
         </div>
 
-        <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-          <img className='w-14' src={assets.appointments_icon} alt="" />
+        <div className='max-sm:min-w-[70vw] flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
+          <img className='w-14 max-sm:w-10' src={assets.appointments_icon} alt="" />
           <div>
-            <p className='text-xl font-semibold text-gray-600'>{dashData.appointments}</p>
-            <p className='text-gray-400'>Appointments</p>
+            <p className='text-xl font-semibold text-gray-600 max-sm:text-sm'>{dashData.appointments}</p>
+            <p className='text-gray-400 max-sm:text-[15px]'>Appointments</p>
           </div>
         </div>
 
-        <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-          <img className='w-14' src={assets.patients_icon} alt="" />
+        <div className='max-sm:min-w-[70vw] flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
+          <img className='w-14 max-sm:w-10' src={assets.patients_icon} alt="" />
           <div>
-            <p className='text-xl font-semibold text-gray-600'>{dashData.patients}</p>
-            <p className='text-gray-400'>Patients</p>
+            <p className='text-xl font-semibold text-gray-600 max-sm:text-sm'>{dashData.patients}</p>
+            <p className='text-gray-400 max-sm:text-[15px]'>Patients</p>
           </div>
         </div>
       </div>
 
       <div className='bg-white'>
-        <div className='flex items-center gap-2.5 px-4 py-4 mt-10 rounded-t border border-gray-200'>
-          <img src={assets.list_icon} alt="" />
-          <p className='font-semibold'>Latest Appointments</p>
+        <div className='flex items-center gap-2.5 px-4 max-sm:px-3 py-4 max-sm:py-2 mt-10 rounded-t border border-gray-200'>
+          <img className='max-sm:w-4' src={assets.list_icon} alt="" />
+          <p className='font-semibold max-sm:text-[12px]'>Latest Appointments</p>
         </div>
 
         <div className='pt-4 border border-t-0 border-gray-200'>

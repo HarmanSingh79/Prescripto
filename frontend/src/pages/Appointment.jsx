@@ -27,7 +27,7 @@ const Appointment = () => {
 
   const getAvailableSlots = async () => {
     if (!docInfo) {
-    return
+      return
     }
     setDocSlots([])
 
@@ -38,16 +38,38 @@ const Appointment = () => {
       // .setDate(day): Sets the day of the month. The code uses currDate.setDate(today.getDate() + i) to advance the date by i days.
       currDate.setDate(today.getDate() + i)
 
-      let endTime = new Date()
-      endTime.setDate(today.getDate() + i)
+      let endTime = new Date(currDate)
+      // endTime.setDate(today.getDate() + i)
       endTime.setHours(21, 0, 0, 0)//until 09:00PM
 
       if (today.getDate() === currDate.getDate()) {
-        currDate.setHours(currDate.getHours() > 10 ? currDate.getHours() + 1 : 10)
-        currDate.setMinutes(currDate.getMinutes() > 30 ? 30 : 0)
+        //   currDate.setHours(currDate.getHours() > 10 ? currDate.getHours() + 1 : 10)
+        //   currDate.setMinutes(currDate.getMinutes() > 30 ? 30 : 0)
+        // } else {
+        //   currDate.setHours(10)
+        //   currDate.setMinutes(0)
+        let hours = currDate.getHours()
+        let minutes = currDate.getMinutes()
+
+        // Round up to the next 30-min slot
+        if (minutes === 0) {
+          // exact hour, keep as is
+        } else if (minutes <= 30) {
+          minutes = 30
+        } else {
+          minutes = 0
+          hours += 1
+        }
+
+        // Don't start before 10 AM
+        if (hours < 10) {
+          hours = 10
+          minutes = 0
+        }
+
+        currDate.setHours(hours, minutes, 0, 0)
       } else {
-        currDate.setHours(10)
-        currDate.setMinutes(0)
+        currDate.setHours(10, 0, 0, 0)
       }
 
       let timeSlots = []
@@ -76,7 +98,9 @@ const Appointment = () => {
         currDate.setMinutes(currDate.getMinutes() + 30)
       }
 
-      setDocSlots(prev => ([...prev, timeSlots]))
+      if (timeSlots.length > 0) {
+        setDocSlots(prev => ([...prev, timeSlots]))
+      }
 
     }
   }
@@ -155,12 +179,12 @@ const Appointment = () => {
       </div>
 
       {/* Booking slots */}
-      <div className='font-medium sm:ml-72 sm:p-4 mt-4 text-gray-700'>
+      <div className='max-sm:text-sm font-medium sm:ml-72 sm:p-4 mt-4 text-gray-700'>
         <p>Booking slots</p>
-        <div className='flex gap-3 items-center w-full overflow-x-scroll mt-4'>
+        <div className='flex max-sm:gap-2 gap-3 items-center w-full overflow-x-scroll mt-4'>
           {
             docSlots.length && docSlots.map((item, index) => (
-              <div onClick={() => setSlotIndex(index)} className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-primary text-white' : 'border border-gray'}`} key={index}>
+              <div onClick={() => setSlotIndex(index)} className={`text-center max-sm:py-4 py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-primary text-white' : 'border border-gray'}`} key={index}>
                 {/* item[0].datetime: Accesses the Date object stored in the first slot.
                     .getDay(): A JavaScript Date method that returns the day of the week as a number */}
                 <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
@@ -170,17 +194,17 @@ const Appointment = () => {
           }
         </div>
 
-        <div className='flex items-center gap-3 w-full overflow-x-scroll mt-4'>
+        <div className='flex items-center max-sm:gap-2 gap-3 w-full overflow-x-scroll mt-4'>
           {
             docSlots.length && docSlots[slotIndex].map((item, index) => (
-              <p onClick={() => setSlotTime(item.time)} className={`text-sm rounded-full shrink-0 font-light px-5 py-2 cursor-pointer ${item.time === slotTime ? 'bg-primary text-white' : 'text-gray-400 border border-gray-300'}`} key={index}>
+              <p onClick={() => setSlotTime(item.time)} className={`text-sm rounded-full shrink-0 font-light px-5 py-2 max-sm:px-2 max-sm:py-1 cursor-pointer ${item.time === slotTime ? 'bg-primary text-white' : 'text-gray-400 border border-gray-300'}`} key={index}>
                 {item.time}
               </p>
             ))
           }
         </div>
         <div>
-          <button onClick={bookAppointment} className='bg-primary text-sm text-white font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an appointment</button>
+          <button onClick={bookAppointment} className='bg-primary text-sm text-white font-light max-sm:px-6 px-14 max-sm:py-2 py-3 rounded-full my-6 cursor-pointer'>Book an appointment</button>
         </div>
 
         <RelatedDoctors docId={docId} speciality={docInfo.speciality} />

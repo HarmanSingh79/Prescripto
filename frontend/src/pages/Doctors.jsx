@@ -48,17 +48,17 @@ const Doctors = () => {
           <p onClick={() => speciality === 'Gastroenterologist' ? navigate('/doctors') : navigate('/doctors/Gastroenterologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === "Gastroenterologist" ? "bg-indigo-100 text-black " : ""} `}>Gastroenterologist</p>
         </div>
 
-        <div className='w-full grid grid-cols-auto gap-4 gap-y-6 '>
+        <div className='grid grid-cols-3 md:grid-cols-5 w-full gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
           {
             filterDoc.map((item, index) => (
               <div onClick={() => navigate(`/appointment/${item._id}`)} key={index} className='border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-2.5 transition-all duration-400'>
                 <img className='bg-blue-50' src={item.image} alt="" />
-                <div className='p-4'>
-                  <div className={`flex items-center text-sm gap-2 text-center ${item.available ? "text-green-500" : "text-gray-500"} `}>
-                    <p className={`w-2 h-2  ${item.available ? "bg-green-500" : "bg-gray-500"}  rounded-full`}></p><p>{item.available ? "Available" : "Not available"}</p>
+                <div className='max-sm:p-2 p-4'>
+                  <div className={`flex items-center max-sm:text-xs text-sm max-sm:gap-1 gap-2 text-center ${item.available?"text-green-500":"text-gray-500"} `}>
+                    <p className={`max-sm:h-1 max-sm:w-1 w-2 h-2  ${item.available ? "bg-green-500" : "bg-gray-500"}  rounded-full`}></p><p>{item.available ? "Available" : "Not available"}</p>
                   </div>
-                  <p className='text-gray-900 text-lg font-medium'>{item.name}</p>
-                  <p className='text-gray-600 text-sm'>{item.speciality}</p>
+                  <p className='text-gray-900 text-lg max-sm:text-[12px] font-medium'>{item.name}</p>
+                  <p className='text-gray-600 max-sm:text-[10px] text-sm'>{item.speciality}</p>
                 </div>
               </div>
             ))

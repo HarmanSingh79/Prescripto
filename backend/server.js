@@ -21,7 +21,9 @@ app.use(express.json())
 app.use(cors({
   origin: [
     "https://prescripto-by-harman.vercel.app",
-    "https://prescripto-admin-harman.vercel.app"
+    "https://prescripto-admin-harman.vercel.app",
+    "http://localhost:5173",   // patient frontend (Vite default)
+    "http://localhost:5174",   // admin panel, if on a different port
   ],
   credentials: true
 })) 

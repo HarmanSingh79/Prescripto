@@ -47,12 +47,12 @@ const MyProfile = () => {
         Edit
         ? <label htmlFor="image">
             <div className='inline-block relative cursor-pointer'>
-              <img className='w-36 rounded opacity-75' src={image ? URL.createObjectURL(image) : userData.image} alt="" />
+              <img className='rounded opacity-75' src={image ? URL.createObjectURL(image) : userData.image} alt="" />
               <img className='w-10 absolute bottom-12 right-12' src={image ? '' : assets.upload_icon} alt="" />
             </div>
             <input onChange={(e)=>setImage(e.target.files[0])} type="file" id="image" hidden/>
         </label>
-        : <img className='w-36 rounded' src={userData.image} alt="" />
+        : <img className='w-36 h-36 object-fit rounded' src={userData.image} alt="" />
       }
 
       
@@ -73,16 +73,16 @@ const MyProfile = () => {
           <p className='font-medium'>Phone:</p>
           {
             Edit
-              ? <input className='bg-gray-100 max-w-52' type="text" value={userData.phone} onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))} />
+              ? <input className='bg-gray-200 rounded p-1 max-w-52' type="text" value={userData.phone} onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))} />
               : <p className='text-blue-400'>{userData.phone}</p>
           }
           <p className='font-medium'>Address:</p>
           {
             Edit
             ? <p>
-                <input className='bg-gray-50 min-w-55' value={userData.address.line1} onChange={(e)=>setUserData(prev=>({...prev, address:{...prev.address,line1:e.target.value}}))} type="text" />
+                <input className='bg-gray-200 min-w-52 rounded px-1 py-1 mb-2' value={userData.address.line1} onChange={(e)=>setUserData(prev=>({...prev, address:{...prev.address,line1:e.target.value}}))} type="text" />
                 <br />
-                <input className='bg-gray-50 min-w-55' value={userData.address.line2} onChange={(e)=>setUserData(prev=>({...prev, address:{...prev.address,line2:e.target.value}}))} type="text" />
+                <input className='bg-gray-200 min-w-52 rounded px-1 py-1' value={userData.address.line2} onChange={(e)=>setUserData(prev=>({...prev, address:{...prev.address,line2:e.target.value}}))} type="text" />
             </p>
             : <p className='text-gray-500 '>
               {userData.address.line1}
@@ -99,7 +99,7 @@ const MyProfile = () => {
           <p className='font-medium'>Gender:</p>
           {
             Edit
-              ? <select className='max-w-20 bg-gray-100' value={userData.gender} onChange={(e)=>setUserData(prev=>({...prev,gender:e.target.value}))}>
+              ? <select className='max-w-30 bg-gray-200 p-1 rounded' value={userData.gender} onChange={(e)=>setUserData(prev=>({...prev,gender:e.target.value}))}>
                 <option value="Not Selected">Not Selected</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -110,7 +110,7 @@ const MyProfile = () => {
           <p className='font-medium'>Date of Birth:</p>
           {
             Edit
-            ? <input className='max-w-28 bg-gray-100' value={userData.dob} type="date" onChange={(e)=>setUserData(prev=>({...prev,dob:e.target.value}))}/>
+            ? <input className='max-w-30 bg-gray-200 p-1 rounded' value={userData.dob} type="date" onChange={(e)=>setUserData(prev=>({...prev,dob:e.target.value}))}/>
             : <p className='text-gray-400'>{userData.dob}</p>
           }
         </div>
