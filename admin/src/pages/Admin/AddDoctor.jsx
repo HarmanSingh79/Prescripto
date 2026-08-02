@@ -132,7 +132,7 @@ const AddDoctor = () => {
   }
 
   return (
-    <form onSubmit={onSubmitHandler} className='m-5 w-full'>
+    <form onSubmit={onSubmitHandler} className='m-5 w-full max-sm:m-3'>
 
       <p className='mb-3 text-lg font-medium'>Add Doctor</p>
 
@@ -201,24 +201,24 @@ const AddDoctor = () => {
         <div className='flex flex-col lg:flex-row items-start gap-10 text-gray-600'>
           <div className='w-full lg:flex-1 flex flex-col gap-4'>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Doctor name</p>
-              <input value={name} onChange={(e) => setName(e.target.value)} className='border rounded px-3 py-2' type="text" placeholder='Name' required />
+              <input value={name} onChange={(e) => setName(e.target.value)} className='border rounded px-3 max-sm:py-0.5 py-2' type="text" placeholder='Name' required />
             </div>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Doctor Email</p>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} className='border rounded px-3 py-2' type="email" placeholder='Email' required />
+              <input value={email} onChange={(e) => setEmail(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="email" placeholder='Email' required />
             </div>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Doctor Password</p>
-              <input value={password} onChange={(e) => setPassword(e.target.value)} className='border rounded px-3 py-2' type="password" placeholder='Password' required />
+              <input value={password} onChange={(e) => setPassword(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="password" placeholder='Password' required />
             </div>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Experience</p>
-              <select value={experience} onChange={(e) => setExperience(e.target.value)} className='border rounded px-3 py-2' name="" id="">
+              <select value={experience} onChange={(e) => setExperience(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' name="" id="">
                 <option value="1 Year">1 Year</option>
                 <option value="2 Year">2 Year</option>
                 <option value="3 Year">3 Year</option>
@@ -232,18 +232,18 @@ const AddDoctor = () => {
               </select>
             </div>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Fees</p>
-              <input value={fees} onChange={(e) => setFees(e.target.value)} className='border rounded px-3 py-2' type="number" placeholder='Fees' required />
+              <input value={fees} onChange={(e) => setFees(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="number" placeholder='Fees' required />
             </div>
 
           </div>
 
           <div className='w-full lg:flex-1 flex flex-col gap-4'>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Speciality</p>
-              <select value={speciality} onChange={(e) => setSpeciality(e.target.value)} className='border rounded px-3 py-2' name="" id="">
+              <select value={speciality} onChange={(e) => setSpeciality(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' name="" id="">
                 <option value="General Physician">General Physician</option>
                 <option value="Gynecologist">Gynecologist</option>
                 <option value="Dermatologist">Dermatologist</option>
@@ -253,15 +253,15 @@ const AddDoctor = () => {
               </select>
             </div>
 
-            <div className='flex-1 flex flex-col gap-1'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Education</p>
-              <input value={degree} onChange={(e) => setDegree(e.target.value)} className='border rounded px-3 py-2' type="text" placeholder='Education' required />
+              <input value={degree} onChange={(e) => setDegree(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="text" placeholder='Education' required />
             </div>
 
             <div className='flex-1 flex flex-col gap-1'>
               <p>Address</p>
-              <input value={address1} onChange={(e) => setAddress1(e.target.value)} className='border rounded px-3 py-2' type="text" placeholder='Line 1' required />
-              <input value={address2} onChange={(e) => setAddress2(e.target.value)} className='border rounded px-3 py-2' type="text" placeholder='Line 2' required />
+              <input value={address1} onChange={(e) => setAddress1(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="text" placeholder='Line 1' required />
+              <input value={address2} onChange={(e) => setAddress2(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="text" placeholder='Line 2' required />
             </div>
 
           </div>
