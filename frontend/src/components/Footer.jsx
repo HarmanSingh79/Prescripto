@@ -42,7 +42,7 @@ const Footer = () => {
                 <div>
                     <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
                     <ul className='flex flex-col gap-2 text-gray-600'>
-                        <li> <a href="tel:+919876543210" onClick={(e) => {
+                        <li> <a href="tel:0164-291-2586" onClick={(e) => {
                             if (window.innerWidth > 768) {
                                 e.preventDefault()
                                 copyToClipboard('0164-291-2586')

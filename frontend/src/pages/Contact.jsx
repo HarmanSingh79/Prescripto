@@ -26,7 +26,7 @@ const Contact = () => {
         <div className='flex flex-col justify-center items-start gap-6'>
           <p className='font-semibold text-lg text-gray-600 '>OUR OFFICE</p>
           <p className='text-gray-500'>Ramgarh Bhunder, Bathinda <br /> 151101, Punjab</p>
-          <p className='text-gray-500'> <a href="tel:+919876543210" onClick={(e) => {
+          <p className='text-gray-500'> <a href="tel:0164-291-2586" onClick={(e) => {
             if (window.innerWidth > 768) {
               e.preventDefault()
               copyToClipboard('0164-291-2586')
