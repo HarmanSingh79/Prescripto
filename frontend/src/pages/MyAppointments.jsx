@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from "../context/AppContext"
+import { assets } from "../assets/assets"
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -123,7 +124,7 @@ const MyAppointments = () => {
 
                 {!item.cancelled && item.payment && !item.isCompleted && <button className='sm:min-w-48 py-2 rounded text-stone-500 bg-indigo-50'>Paid</button>}
 
-                {item.cancelled || item.payment || item.isCompleted ? "" : <button onClick={()=>appointmentRazorpay(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-green-600 hover:text-white transition-all duration-400 hover:scale-105'>Pay Online</button>}
+                {item.cancelled || item.payment || item.isCompleted ? "" : <button onClick={()=>appointmentRazorpay(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-green-600 hover:text-white transition-all duration-400 hover:scale-105'> Pay Online <img className='inline h-4 ml-1' src={assets.razorpay_logo} alt="Razorpay logo" /> </button>}
 
                 {item.cancelled || item.isCompleted ? "" :<button onClick={()=>cancelAppointment(item._id)} className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-400 hover:scale-105'>Cancel Appointment</button>}
 
