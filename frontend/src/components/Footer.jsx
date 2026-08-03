@@ -34,7 +34,7 @@ const Footer = () => {
                         <li className='cursor-pointer' onClick={() => { navigate('/'); scrollTo(0, 0) }}>Home</li>
                         <li onClick={() => { navigate("/about"); scrollTo(0, 0) }} className='cursor-pointer'>About Us</li>
                         <li onClick={() => { navigate("/contact"); scrollTo(0, 0) }} className='cursor-pointer'>Contact Us</li>
-                        <li className='cursor-pointer'>Privacy Policy</li>
+                        <li onClick={()=>{navigate("/privacy-policy");scrollTo(0,0)}} className='cursor-pointer'>Privacy Policy</li>
                     </ul>
                 </div>
 

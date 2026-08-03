@@ -15,6 +15,7 @@ userRouter.get("/my-appointments",authUser,listAppointments)
 userRouter.post("/cancel-appointment",authUser,cancelAppointment)
 userRouter.post("/payment-razorpay",authUser,paymentRazorpay)
 userRouter.post("/verify-razorpay",authUser,verifyRazorpay)
+
 userRouter.post("/send-verify-otp",authUser,sendVerifyOTP)
 userRouter.post("/verify-account",authUser,verifyEmail)
 

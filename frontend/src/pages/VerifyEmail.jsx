@@ -9,6 +9,7 @@ const VerifyEmail = () => {
     const [otp, setOtp] = useState(new Array(6).fill(''))
     const inputRefs = useRef([])
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const otpSentRef = useRef(false)
 
     // Runs every time the user types a digit into one of the 6 OTP boxes
     const handleChange = (event, boxIndex) => {
@@ -90,16 +91,27 @@ const VerifyEmail = () => {
     }
 
     useEffect(() => {
-    if (!token) {
-      navigate('/login')
-      return
-    }
-    if (userData?.isAccountVerified) {
-      navigate('/my-profile')
-      return
-    }
-    sendVerifyOtp()
-  }, [])
+        if (!token) {
+            navigate('/login')
+            return
+        }
+
+        // Wait for user profile to load before making decisions.
+        if (userData === false) {
+            return
+        }
+
+        if (userData.isAccountVerified) {
+            navigate('/my-profile')
+            return
+        }
+
+        // Prevent duplicate OTP calls caused by re-renders/state updates.
+        if (!otpSentRef.current) {
+            otpSentRef.current = true
+            sendVerifyOtp()
+        }
+    }, [token, userData, navigate, sendVerifyOtp])
 
     return (
         <form onSubmit={onSubmitHandler} className='min-h-[70vh] flex items-center justify-center'>

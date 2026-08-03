@@ -44,11 +44,14 @@ const AppContextProvider = (props) => {
 
     const sendVerifyOtp = async () => {
         try {
-            const { data } = await axios.post(backendURL + '/api/user/send-verify-otp',{},{ headers: { token } })
+            const { data } = await axios.post(backendURL + '/api/user/send-verify-otp',{},{headers:{token}})
             if (data.success) {
                 toast.success(data.message)
                 return true
             } else {
+                if (data.message?.toLowerCase().includes('already verified')) {
+                    return false
+                }
                 toast.error(data.message)
                 return false
             }
@@ -60,9 +63,10 @@ const AppContextProvider = (props) => {
 
     const verifyEmail = async (otp) => {
         try {
-            const { data } = await axios.post(backendURL + '/api/user/verify-account',{ otp },{ headers: { token } })
+            const { data } = await axios.post(backendURL + '/api/user/verify-account',{otp},{headers:{token}})
             if (data.success) {
                 toast.success(data.message)
+                await loadUserProfileData()
                 return true
             } else {
                 toast.error(data.message)

@@ -6,6 +6,20 @@ import jwt from "jsonwebtoken"
 import appointmentModel from "../models/appointmentModel.js"
 import userModel from "../models/userModel.js"
 
+//password strength check
+const isStrongPassword = (password) => {
+    const checks = {
+        length: password.length >= 8,
+        lowercase: /[a-z]/.test(password),
+        uppercase: /[A-Z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+    return {
+        valid: Object.values(checks).every(Boolean), checks
+    };
+};
+
 // api for adding a doctor by the admin
 const addDoctor = async (req, res) => {
     try {
@@ -22,8 +36,8 @@ const addDoctor = async (req, res) => {
             return res.json({ success: false, message: "Please enter a valid email" })
         }
 
-        //check for password length
-        if (password.length < 8) {
+        //check for password strength
+        if (!isStrongPassword(password).valid) {
             return res.json({ success: false, message: "Please enter a strong password" })
         }
 
@@ -83,20 +97,20 @@ const loginAdmin = async (req, res) => {
 //api to get all doctors list by the admin
 const allDoctors = async (req, res) => {
     try {
-        const doctors=await doctorModel.find({}).select('-password')
-        res.json({success:true, doctors})
+        const doctors = await doctorModel.find({}).select('-password')
+        res.json({ success: true, doctors })
     } catch (error) {
-        console.log(error); 
+        console.log(error);
         res.json({ success: false, message: error.message });
     }
 }
 
 //api to get all appointments list
-const appointmentsAdmin=async(req,res)=>{
-    try{
-        const appointments=await appointmentModel.find({})//will provide all the appointments data
-        res.json({success:true,appointments})
-    }catch(error){
+const appointmentsAdmin = async (req, res) => {
+    try {
+        const appointments = await appointmentModel.find({})//will provide all the appointments data
+        res.json({ success: true, appointments })
+    } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
@@ -128,20 +142,20 @@ const appointmentCancel = async (req, res) => {
 }
 
 //api for admin dashboard
-const adminDashboard=async(req,res)=>{
+const adminDashboard = async (req, res) => {
     try {
-        const doctors=await doctorModel.find({})
-        const users=await userModel.find({})
-        const appointments=await appointmentModel.find({}) 
+        const doctors = await doctorModel.find({})
+        const users = await userModel.find({})
+        const appointments = await appointmentModel.find({})
 
-        const dashData={
-            doctors:doctors.length,
-            patients:users.length,
-            appointments:appointments.length,
-            latestAppointments:appointments.reverse().slice(0,5)
+        const dashData = {
+            doctors: doctors.length,
+            patients: users.length,
+            appointments: appointments.length,
+            latestAppointments: appointments.reverse().slice(0, 5)
         }
 
-        res.json({success:true, dashData})
+        res.json({ success: true, dashData })
 
     } catch (error) {
         console.log(error)

@@ -8,6 +8,19 @@ import appointmentModel from '../models/appointmentModel.js'
 import razorpay from 'razorpay'
 import transporter from "../config/nodemailer.js"
 
+
+//checking the password strength
+const isStrongPassword = (password) => {
+    const checks = {
+        length: password.length >= 8,
+        lowercase: /[a-z]/.test(password),
+        uppercase: /[A-Z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+    return { valid: Object.values(checks).every(Boolean), checks };
+};
+
 //api to register user
 const registerUser = async (req, res) => {
     try {
@@ -22,9 +35,9 @@ const registerUser = async (req, res) => {
             return res.json({ success: false, message: "Please enter a valid email" })
         }
 
-        //checking the password length
-        if (password.length < 8) {
-            return res.json({ success: false, message: "Please enter a strong password" })
+        //checking the password strength
+        if (!isStrongPassword(password).valid) {
+            return res.json({ success: false, message: "Enter a strong password!" })
         }
 
         //hash the user password
@@ -41,6 +54,10 @@ const registerUser = async (req, res) => {
         await newUser.save()
 
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET)
+        await sendWelcomeEmail(newUser.email, newUser.name).catch(err =>
+            console.log("Welcome email failed!", err.message)
+        )
+
         res.json({ success: true, token })
 
     } catch (error) {
@@ -48,6 +65,19 @@ const registerUser = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+//welcome email
+const sendWelcomeEmail = async (email, name) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Welcome to Prescripto 🎉",
+        html: `<h2>Hi ${name},</h2>
+           <p>Welcome to Prescripto! Your account has been created successfully.</p>
+           <p>Please verify your email to start booking appointments.</p>`
+    };
+    await transporter.sendMail(mailOptions);
+};
 
 //api for user login
 const loginUser = async (req, res) => {
@@ -85,7 +115,7 @@ const sendVerifyOTP = async (req, res) => {
         }
 
         if (user.isAccountVerified) {
-            return res.json({ success: false, message: "Account alredy verified!" })
+            return res.json({ success: false, message: "Account already verified!, please login." })
         }
 
         const otp = String(Math.floor(100000 + Math.random() * 900000))
@@ -165,6 +195,17 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
     try {
         const userId = req.userId
+
+        const user = await userModel.findById(userId)
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found" })
+        }
+
+        if (!user.isAccountVerified) {
+            return res.json({ success: false, message: "Please verify your email before updating your profile" })
+        }
+
         const { name, phone, address, dob, gender } = req.body
         const imageFile = req.file
         if (!(name && phone && dob && gender)) {

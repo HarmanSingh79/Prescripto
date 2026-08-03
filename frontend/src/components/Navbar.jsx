@@ -8,7 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [showMenu, setShowMenu] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  
+
   const dropdownRef = useRef(null)
 
   useEffect(() => {
@@ -59,9 +59,20 @@ const Navbar = () => {
               <img className='w-2.5' src={assets.dropdown_icon} alt="" />
               <div className={`absolute top-full right-0 pt-2 text-base font-medium text-gray-600 z-40 ${isDropdownOpen ? 'block' : 'hidden'}`}>
                 <div className='min-w-48 bg-stone-100 flex flex-col gap-4 p-4' onClick={(e) => e.stopPropagation()}>
-                  <p onClick={() => { navigate('/my-profile'); setIsDropdownOpen(false) }} className='hover:text-black cursor-pointer'>My Profile</p>
-                  <p onClick={() => { navigate('/my-appointments'); setIsDropdownOpen(false) }} className='hover:text-black cursor-pointer'>My Apointments</p>
-                  <p onClick={logout} className='hover:text-black cursor-pointer'>Logout</p>
+                  {
+                    !userData.isAccountVerified
+                      ? <>
+                        <p className='text-sm text-gray-500'>Please verify your email to continue</p>
+                        <p onClick={() => { navigate('/verify-email'); setIsDropdownOpen(false) }} className='text-primary underline cursor-pointer'>Verify Now</p>
+                        <p onClick={() => { logout(); setIsDropdownOpen(false); navigate("/") }} className='hover:text-black cursor-pointer'>Logout</p>
+                      </>
+                      : <>
+                        <p onClick={() => { navigate('/my-profile'); setIsDropdownOpen(false) }} className='hover:text-black cursor-pointer'>My Profile</p>
+                        <p onClick={() => { navigate('/my-appointments'); setIsDropdownOpen(false) }} className='hover:text-black cursor-pointer'>My Apointments</p>
+                        <p onClick={() => { logout(); setIsDropdownOpen(false); navigate("/") }} className='hover:text-black cursor-pointer'>Logout</p>
+                      </>
+                  }
+
                 </div>
               </div>
             </div>

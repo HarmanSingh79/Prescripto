@@ -4,13 +4,24 @@ import { AdminContext } from '../../context/AdminContext'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { removeBackground } from '@imgly/background-removal'
+import { Eye, EyeOff } from "lucide-react"
 
 const AddDoctor = () => {
 
   const [docImg, setDocImg] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false);
+  const checks = {
+    length: password.length >= 8,
+    lowercase: /[a-z]/.test(password),
+    uppercase: /[A-Z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+
   const [experience, setExperience] = useState('1 Year')
   const [fees, setFees] = useState('')
   const [about, setAbout] = useState('')
@@ -134,7 +145,7 @@ const AddDoctor = () => {
   return (
     <form onSubmit={onSubmitHandler} className='m-5 w-full max-sm:w-[90vw] max-sm:mx-auto'>
 
-      <p className='mb-3 text-lg font-medium'>Add Doctor</p>
+      <p className='mb-3 max-sm:ml-2 text-lg font-medium'>Add Doctor</p>
 
       <div className='bg-white px-8 py-8 border border-gray-300 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll'>
 
@@ -211,10 +222,26 @@ const AddDoctor = () => {
               <input value={email} onChange={(e) => setEmail(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="email" placeholder='Email' required />
             </div>
 
-            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
+            <div className='flex-1 flex flex-col gap-1 max-sm:gap-0 relative'>
               <p>Doctor Password</p>
-              <input value={password} onChange={(e) => setPassword(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="password" placeholder='Password' required />
+              <input className="border p-2 rounded w-full pr-10" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
+
+              <span onClick={() => setShowPassword(!showPassword)} className="absolute right-3 bottom-3 cursor-pointer text-gray-500" >{showPassword ? <EyeOff size={18} /> : <Eye size={18} />} </span>
             </div>
+
+            <ul className="text-sm mt-1 space-y-0.5 grid grid-cols-2 max-sm:text-[9px]">
+              {Object.entries({
+                "At least 8 characters": checks.length,
+                "One lowercase letter": checks.lowercase,
+                "One uppercase letter": checks.uppercase,
+                "One number": checks.number,
+                "One special character": checks.special,
+              }).map(([label, ok]) => (
+                <li key={label} className={ok ? "text-green-600" : "text-red-500"}>
+                  {ok ? "✓" : "✗"} {label}
+                </li>
+              ))}
+            </ul>
 
             <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Experience</p>
