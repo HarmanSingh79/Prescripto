@@ -89,6 +89,8 @@ RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 ADMIN_EMAIL=your_admin_email
 ADMIN_PASSWORD=your_admin_password
+EMAIL_USER=your_email
+EMAIL_APP_PASSWORD=app_password_generated_through_email
 ```
 
 Run the backend:
