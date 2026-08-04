@@ -24,7 +24,9 @@ const MyProfile = () => {
   }, [userData])
 
   useEffect(() => {
-    if (userData && (!userData.phone || !userData.dob || !userData.isPhoneVerified)) {
+
+    //!userData.isPhoneVerified
+    if (userData && (!userData.phone || !userData.dob)) {
       setEdit(true) // force edit mode open, can't be closed until filled
     }
   }, [userData])
