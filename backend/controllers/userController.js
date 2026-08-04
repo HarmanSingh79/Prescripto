@@ -7,6 +7,8 @@ import doctorModel from "../models/doctorModel.js"
 import appointmentModel from '../models/appointmentModel.js'
 import razorpay from 'razorpay'
 import transporter from "../config/nodemailer.js"
+import { adminAuth } from '../config/firebaseAdmin.js'
+// import admin from '../config/firebaseAdmin.js'
 
 
 //checking the password strength
@@ -65,6 +67,29 @@ const registerUser = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+//api to verify otp sent to phone
+const verifyPhone = async (req, res) => {
+    try {
+        const { idToken, phone } = req.body
+        // const decoded = await admin.auth().verifyIdToken(idToken)
+        const decoded = await adminAuth.verifyIdToken(idToken)
+
+        if (decoded.phone_number !== `+91${phone}`) {
+            return res.json({ success: false, message: "Phone mismatch" })
+        }
+
+        const user = await userModel.findById(req.userId)
+        user.phone = phone
+        user.isPhoneVerified = true
+        await user.save()
+
+        res.json({ success: true, message: "Phone number verified and updated" })
+    } catch (error) {
+        res.json({ success: false, message: "Invalid or expired verification" })
+    }
+}
+
 
 //welcome email
 const sendWelcomeEmail = async (email, name) => {
@@ -207,10 +232,16 @@ const updateProfile = async (req, res) => {
         }
 
         const { name, phone, address, dob, gender } = req.body
+
         const imageFile = req.file
-        if (!(name && phone && dob && gender)) {
+
+        if (!(name && phone && dob && gender) || dob === "Not Selected" || gender === "Not Selected") {
             return res.json({ success: false, message: "Some details are missing!" })
         }
+
+        // if (phone !== user.phone || !user.isPhoneVerified) {
+        //     return res.json({ success: false, message: "Please verify your phone number before saving" })
+        // }
 
         await userModel.findByIdAndUpdate(userId, { name, phone, address: JSON.parse(address), dob, gender })
 
@@ -379,4 +410,4 @@ const verifyRazorpay = async (req, res) => {
 }
 
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP }
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP, verifyPhone }

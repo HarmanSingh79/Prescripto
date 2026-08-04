@@ -4,12 +4,14 @@ import { AdminContext } from '../context/AdminContext'
 import axios from "axios"
 import { toast } from 'react-toastify'
 import { DoctorContext } from '../context/DoctorContext'
+import { Eye, EyeOff } from "lucide-react"
 
 const Login = () => {
 
     const [state, setState] = useState('Admin')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false);
 
     const {setAToken, backendURL}=useContext(AdminContext)  
     const {setDToken}=useContext(DoctorContext)  
@@ -48,12 +50,14 @@ const Login = () => {
                     <input value={email} onChange={(e)=>setEmail(e.target.value)} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="email" required />
                 </div>
 
-                <div className='w-full'>
+                <div className='w-full relative'>
                     <p>Password</p>
-                    <input value={password} onChange={(e)=>setPassword(e.target.value)} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="password" required/>
+                    <input value={password} onChange={(e)=>setPassword(e.target.value)} className=' border border-[#DADADA] rounded w-full p-2 mt-1' type={showPassword ? "text" : "password"} required/>
+                    
+                    <span onClick={() => setShowPassword(!showPassword)} className="absolute right-3 bottom-2.5 cursor-pointer text-gray-500">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</span>
                 </div>
 
-                <button className='bg-primary text-white w-full py-2 rounded-md text-base'>Login</button>
+                <button className='bg-primary cursor-pointer text-white w-full py-2 rounded-md text-base'>Login</button>
 
                 {
                     state=="Admin"
