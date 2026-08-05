@@ -35,7 +35,7 @@ const Doctors = () => {
 
         <button onClick={() => setShowFilter(prev => !prev)} className={`py-1 px-3 border rounded text-sm sm:hidden transition-all ${showFilter ? "bg-primary text-white" : ""}`} >Filters</button>
         <div className={`flex flex-col gap-4 text-sm text-gray-600  ${showFilter ? "flex" : "hidden sm:flex"}`}>
-          <p onClick={() => speciality === 'General physician' ? navigate('/doctors') : navigate('/doctors/General physician')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === "General Physician" ? "bg-indigo-100 text-black " : ""}`}>General Physician</p>
+          <p onClick={() => speciality === 'General Physician' ? navigate('/doctors') : navigate('/doctors/General Physician')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === "General Physician" ? "bg-indigo-100 text-black " : ""}`}>General Physician</p>
 
           <p onClick={() => speciality === 'Gynecologist' ? navigate('/doctors') : navigate('/doctors/Gynecologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === "Gynecologist" ? "bg-indigo-100 text-black " : ""} `}>Gynecologist</p>
 
@@ -52,7 +52,7 @@ const Doctors = () => {
           {
             filterDoc.map((item, index) => (
               <div onClick={() => navigate(`/appointment/${item._id}`)} key={index} className='border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-2.5 transition-all duration-400'>
-                <img className='bg-blue-50' src={item.image} alt="" />
+                <img className='bg-blue-50 object-fit w-full h-47 max-sm:h-24' src={item.image} alt="" />
                 <div className='max-sm:p-2 p-4'>
                   <div className={`flex items-center max-sm:text-xs text-sm max-sm:gap-1 gap-2 text-center ${item.available?"text-green-500":"text-gray-500"} `}>
                     <p className={`max-sm:h-1 max-sm:w-1 w-2 h-2  ${item.available ? "bg-green-500" : "bg-gray-500"}  rounded-full`}></p><p>{item.available ? "Available" : "Not available"}</p>

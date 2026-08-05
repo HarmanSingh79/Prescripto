@@ -261,7 +261,7 @@ const AddDoctor = () => {
 
             <div className='flex-1 flex flex-col gap-1 max-sm:gap-0'>
               <p>Fees</p>
-              <input value={fees} onChange={(e) => setFees(e.target.value)} className='border max-sm:py-0.5 rounded px-3 py-2' type="number" placeholder='Fees' required />
+              <input value={fees} onChange={(e) => setFees(e.target.value)} className='border no-spinner max-sm:py-0.5 rounded px-3 py-2' type="number" placeholder='Fees' required />
             </div>
 
           </div>

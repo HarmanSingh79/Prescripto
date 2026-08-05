@@ -4,12 +4,17 @@ import { DoctorContext } from '../../context/DoctorContext'
 import { AppContext } from '../../context/AppContext'
 import {toast} from "react-toastify"
 import axios from "axios"
+import { Eye, EyeOff } from "lucide-react"
 
 const DoctorProfile = () => {
 
   const { dToken, profileData, setProfileData, getProfileData, backendURL } = useContext(DoctorContext)
   const { currency} = useContext(AppContext)
   const [edit, setEdit]=useState(false)
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [oldpassword, setOldPassword] = useState('')
+  const [newpassword, setNewPassword] = useState('')
 
   const updateProfile=async()=>{
     try {
@@ -47,7 +52,7 @@ const DoctorProfile = () => {
       <div className='flex flex-col gap-4 m-5'>
 
         <div>
-          <img className='bg-primary/80 w-full max-sm:max-w-50 sm:max-w-64 rounded-lg' src={profileData.image} alt="" />
+          <img className='bg-primary/80 w-full max-sm:h-52 h-60 max-sm:max-w-50 sm:max-w-64 rounded-lg ' src={profileData.image} alt="" />
         </div>
 
         <div className='flex-1 border border-stone-300 rounded-lg max-sm:p-3 p-8 max-sm:py-3 py-7 bg-white'>
@@ -80,6 +85,26 @@ const DoctorProfile = () => {
             <input onChange={()=>edit && setProfileData(prev=>({...prev, available:!prev.available}))} checked={profileData.available} type="checkbox" name="" id="" />
             <label htmlFor="">Available</label>
           </div>
+
+
+          {
+            edit && 
+            <div className='flex flex-col gap-1 mt-6'>
+            <p>Change Password</p>
+            <div className='flex flex-col gap-2'>
+              <div className='w-fit'>
+                <input placeholder='Enter old password' value={oldpassword} onChange={(e)=>setOldPassword(e.target.value)} type={showPassword ? "text" : "password"} className='border w-53 border-gray-300 rounded pr-10'/>
+              </div>
+
+              <div className='w-fit'>
+                <input placeholder='Enter new password' value={newpassword} onChange={(e)=>setNewPassword(e.target.value)} type={showPassword ? "text" : "password"} className='border w-53 border-gray-300 rounded pr-10'/>
+              </div>
+
+              <button onClick={() => setShowPassword(!showPassword)} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded w-53 cursor-pointer text-gray-500">{showPassword ? "Hide" : "Show"}</button>
+
+            </div>
+          </div>
+          }
 
 
           {

@@ -26,3 +26,13 @@
         @apply text-white bg-primary;
     }
 }
+
+@layer components {
+  .no-spinner {
+    @apply [&::-webkit-inner-spin-button]:appearance-none
+           [&::-webkit-outer-spin-button]:appearance-none
+           [appearance:textfield]
+           [&::-webkit-inner-spin-button]:m-0
+           [&::-webkit-outer-spin-button]:m-0;
+  }
+}   

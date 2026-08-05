@@ -42,11 +42,17 @@ const MyProfile = () => {
   const [isSendingOtp, setIsSendingOtp] = useState(false)
   const otpInputRefs = useRef([])
 
+  // useEffect(() => {
+  //   if (userData) {
+  //     setPhoneInput(userData.phone || '')
+  //   }
+  // }, [userData])
+
   useEffect(() => {
-    if (userData) {
+    if (userData?.phone !== undefined) {
       setPhoneInput(userData.phone || '')
     }
-  }, [userData])
+  }, [userData?.phone])
 
   useEffect(() => {
     if (showOtpBox) {
@@ -211,7 +217,7 @@ const MyProfile = () => {
           {
             Edit
               ? <div className='flex flex-col gap-2'>
-                <input className='bg-gray-200 rounded p-1 max-w-52' type="text" value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} />
+                <input className='bg-gray-200 no-spinner rounded p-1 max-w-52' type="number" value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} />
 
                 {!showOtpBox&& PHONE_OTP_ENABLED && phoneInput !== userData.phone && (
                   <button
