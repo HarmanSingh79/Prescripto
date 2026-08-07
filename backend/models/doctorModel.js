@@ -14,6 +14,8 @@ const doctorSchema=new mongoose.Schema({
     address:{type:Object, required:true},
     date:{type:Number, required:true},//to know when the doctor was added in the database
     slots_booked:{type:Object, default:{}},
+    resetOtp: { type: String, default: '' },
+    resetOtpExpireAt: { type: Number, default: 0 },
 },{minimize:false})
 //By default, Mongoose removes fields with no keys or elements to keep the database tidy. Setting minimize: false allows you to store empty structures explicitly.
 
