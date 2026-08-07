@@ -146,6 +146,10 @@ const resetDoctorPassword = async (req, res) => {
       return res.json({ success: false, message: "Missing required fields" })
     }
 
+    if(newPassword===oldPassword){
+        return res.json({success:false, message:"New password cannot be same as old."})
+    }
+
     if (!validator.isStrongPassword(newPassword, {
       minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
     })) {
