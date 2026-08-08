@@ -127,7 +127,7 @@ const Login = () => {
 
                                     <input type={showPassword ? "text" : "password"} placeholder="Confirm new password" className="border rounded px-3 py-2" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} />
 
-                                    <button onClick={() => setShowPassword(!showPassword)} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded cursor-pointer py-1 text-gray-500">{showPassword ? "Hide" : "Show"}</button>
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword) }} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded cursor-pointer py-1 text-gray-500">{showPassword ? "Hide" : "Show"}</button>
 
                                     <button type="button" onClick={handleForgotPassword} className="bg-primary cursor-pointer text-white py-2 rounded"> Reset Password </button>
 

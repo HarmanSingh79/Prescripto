@@ -151,7 +151,7 @@ const DoctorProfile = () => {
                     </div>
                     
 
-                    <button onClick={handleSendOtp} disabled={isSendingOtp} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border cursor-pointer border-primary text-sm rounded-full mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
+                    <button type="button" onClick={handleSendOtp} disabled={isSendingOtp} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border cursor-pointer border-primary text-sm rounded-full mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
                       {isSendingOtp ? 'Sending OTP...' : 'Send OTP'}
                     </button>
                   </>
@@ -169,9 +169,9 @@ const DoctorProfile = () => {
                       <input placeholder='Confirm new password' value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} type={showPassword ? "text" : "password"} className='border w-60 outline-none focus:border-gray-400 border-gray-300 rounded pr-10 px-2 py-1' />
                     </div>
 
-                    <button onClick={() => setShowPassword(!showPassword)} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded w-60 cursor-pointer py-1 text-gray-500">{showPassword ? "Hide" : "Show"}</button>
+                    <button type="button" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword) }} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded w-60 cursor-pointer py-1 text-gray-500">{showPassword ? "Hide" : "Show"}</button>
 
-                    <button onClick={handleVerifyOtpAndResetPassword} disabled={isResetting} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full cursor-pointer mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
+                    <button type="button" onClick={handleVerifyOtpAndResetPassword} disabled={isResetting} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full cursor-pointer mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
                       {isResetting ? 'Verifying...' : 'Verify OTP & Update Password'}
                     </button>
                   </>
@@ -183,8 +183,8 @@ const DoctorProfile = () => {
 
           {
             edit
-              ? <button onClick={updateProfile} className='max-sm:text-xs min-w-43 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Save</button>
-              : <button onClick={() => setEdit(true)} className='max-sm:text-xs min-w-43 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Edit</button>
+              ? <button type="button" onClick={updateProfile} className='max-sm:text-xs min-w-43 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Save</button>
+              : <button type="button" onClick={() => setEdit(true)} className='max-sm:text-xs min-w-43 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full mt-5 hover:text-white hover:bg-primary transition-all'>Edit</button>
           }
 
         </div>
