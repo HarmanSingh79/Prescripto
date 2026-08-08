@@ -13,31 +13,66 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false);
 
-    const {setAToken, backendURL}=useContext(AdminContext)  
-    const {setDToken}=useContext(DoctorContext)  
+    const [showForgotPassword, setShowForgotPassword] = useState(false)
+    const [resetStep, setResetStep] = useState(1)
+    const [resetEmail, setResetEmail] = useState('')
+    const [otp, setOtp] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-    const onSubmitHandler=async(event)=>{
+    const { setAToken, backendURL } = useContext(AdminContext)
+    const { setDToken, sendForgotOtp, setForgotPass } = useContext(DoctorContext)
+
+    const handleSendForgotOtp = async () => {
+        if (!resetEmail) {
+            toast.error("Please enter your email")
+            return
+        }
+        const success = await sendForgotOtp(resetEmail)
+        if (success) setResetStep(2)
+    }
+
+    const handleForgotPassword = async () => {
+        if (newPassword !== confirmNewPassword) {
+            toast.error("Passwords do not match")
+            return
+        }
+        const success = await setForgotPass(resetEmail, otp, newPassword)
+        if (success) closeForgotPassword()
+    }
+
+    const closeForgotPassword = () => {
+        setShowForgotPassword(false)
+        setResetStep(1)
+        setResetEmail('')
+        setOtp('')
+        setNewPassword('')
+        setConfirmNewPassword('')
+    }
+
+    const onSubmitHandler = async (event) => {
         event.preventDefault() //to prevent reload of webpage after submission
-        try{
-            if(state=="Admin"){
-                const {data}=await axios.post(backendURL+'/api/admin/login',{email,password})
-                if(data.success){
-                    localStorage.setItem('aToken',data.token)
+        try {
+            if (state == "Admin") {
+                const { data } = await axios.post(backendURL + '/api/admin/login', { email, password })
+                if (data.success) {
+                    localStorage.setItem('aToken', data.token)
                     setAToken(data.token)
-                }else{
+                } else {
                     toast.error(data.message)
                 }
-            }else{
-                const {data}=await axios.post(backendURL+'/api/doctor/login',{email,password})
-                if(data.success){
-                    localStorage.setItem('dToken',data.token)
+            } else {
+                const { data } = await axios.post(backendURL + '/api/doctor/login', { email, password })
+                if (data.success) {
+                    localStorage.setItem('dToken', data.token)
                     setDToken(data.token)
-                }else{
+                } else {
                     toast.error(data.message)
                 }
             }
-        }catch(error){
-
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
         }
     }
 
@@ -47,23 +82,64 @@ const Login = () => {
                 <p className='text-2xl font-semibold m-auto '><span className='text-primary'>{state}</span> Login</p>
                 <div className='w-full'>
                     <p>Email</p>
-                    <input value={email} onChange={(e)=>setEmail(e.target.value)} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="email" required />
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="email" required />
                 </div>
 
                 <div className='w-full relative'>
                     <p>Password</p>
-                    <input value={password} onChange={(e)=>setPassword(e.target.value)} className=' border border-[#DADADA] rounded w-full p-2 mt-1' type={showPassword ? "text" : "password"} required/>
-                    
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} className=' border border-[#DADADA] rounded w-full p-2 mt-1' type={showPassword ? "text" : "password"} required />
+
                     <span onClick={() => setShowPassword(!showPassword)} className="absolute right-3 bottom-2.5 cursor-pointer text-gray-500">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</span>
                 </div>
 
                 <button className='bg-primary cursor-pointer text-white w-full py-2 rounded-md text-base'>Login</button>
 
                 {
-                    state=="Admin"
-                    ? <p>Doctor Login? <span className='text-primary underline cursor-pointer font-semibold' onClick={()=>setState("Doctor")}>Click here</span></p>
-                    : <p>Admin Login? <span className='text-primary underline cursor-pointer font-semibold' onClick={()=>setState("Admin")}>Click here</span></p>
+                    state == "Admin"
+                        ? <p>Doctor Login? <span className='text-primary underline cursor-pointer font-semibold' onClick={() => setState("Doctor")}>Click here</span></p>
+                        : <p>Admin Login? <span className='text-primary underline cursor-pointer font-semibold' onClick={() => setState("Admin")}>Click here</span></p>
                 }
+
+                {state === 'Doctor' && (
+                    <p className="text-primary text-sm text-right cursor-pointer" onClick={() => setShowForgotPassword(true)}>Forgot password?</p>
+                )}
+
+                {showForgotPassword && (
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center z-50">
+                        <div className="bg-white p-6 rounded-lg w-80 flex flex-col gap-3 relative">
+                            <p className="text-lg font-medium">Reset Password</p>
+
+                            {resetStep === 1 && (
+                                <>
+                                    <input type="email" placeholder="Enter your registered email" className="border rounded px-3 py-2 border-gray-400" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} />
+
+                                    <button type="button" onClick={handleSendForgotOtp} className="hover:bg-primary cursor-pointer hover:text-white py-2 rounded border border-gray-200 transition-all duration-300">
+                                        Send OTP</button>
+                                </>
+                            )}
+
+                            {resetStep === 2 && (
+                                <>
+                                    <input type="text" placeholder="Enter OTP" className="border rounded px-3 py-2"
+                                        value={otp} onChange={(e) => setOtp(e.target.value)} />
+
+                                    <input type={showPassword ? "text" : "password"} placeholder="New password" className="border rounded px-3 py-2" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+
+                                    <input type={showPassword ? "text" : "password"} placeholder="Confirm new password" className="border rounded px-3 py-2" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} />
+
+                                    <button onClick={() => setShowPassword(!showPassword)} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded cursor-pointer py-1 text-gray-500">{showPassword ? "Hide" : "Show"}</button>
+
+                                    <button type="button" onClick={handleForgotPassword} className="bg-primary cursor-pointer text-white py-2 rounded"> Reset Password </button>
+
+                                    <p className="text-sm text-primary cursor-pointer" onClick={handleSendForgotOtp}>
+                                        Didn't get it? Resend OTP </p>
+                                </>
+                            )}
+
+                            <p className="text-sm text-gray-500 transition-all duration-300 cursor-pointer hover:bg-red-500 hover:text-white py-2 border border-gray-200 rounded text-center" onClick={closeForgotPassword}>  Cancel </p>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </form>

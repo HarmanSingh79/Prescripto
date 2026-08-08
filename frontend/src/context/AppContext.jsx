@@ -78,6 +78,28 @@ const AppContextProvider = (props) => {
         }
     }
 
+    const sendForgotOtp = async (email) => {
+        try {
+            const { data } = await axios.post(backendURL + '/api/user/send-forgot-otp', { email })
+            data.success ? toast.success(data.message) : toast.error(data.message)
+            return data.success
+        } catch (error) {
+            toast.error(error.message)
+            return false
+        }
+    }
+    
+    const setForgotPass = async (email, otp, newPassword) => {
+        try {
+            const { data } = await axios.post(backendURL + '/api/user/set-password', { email, otp, newPassword })
+            data.success ? toast.success(data.message) : toast.error(data.message)
+            return data.success
+        } catch (error) {
+            toast.error(error.message)
+            return false
+        }
+    }
+
     useEffect(() => {
         getDoctorsData()
     }, [])
@@ -98,7 +120,8 @@ const AppContextProvider = (props) => {
         userData, setUserData,
         loadUserProfileData,
         sendVerifyOtp,
-        verifyEmail
+        verifyEmail,
+        sendForgotOtp,setForgotPass
     }
 
     return (

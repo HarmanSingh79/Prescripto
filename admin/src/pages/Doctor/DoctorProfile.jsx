@@ -58,7 +58,7 @@ const DoctorProfile = () => {
     }
 
     setIsSendingOtp(true)
-    const success = await sendResetOtp(profileData.email)
+    const success = await sendResetOtp(profileData.email, oldPassword)
     if (success) {
       setOtpSent(true)
       setOtp('')
@@ -75,10 +75,6 @@ const DoctorProfile = () => {
     if (newPassword !== confirmNewPassword) {
       toast.error("New passwords do not match")
       return
-    }
-     
-    if(newPassword===oldPassword){
-      toast.error("New password cannot be same as old password!")
     }
 
     setIsResetting(true)
@@ -155,7 +151,7 @@ const DoctorProfile = () => {
                     </div>
                     
 
-                    <button onClick={handleSendOtp} disabled={isSendingOtp} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
+                    <button onClick={handleSendOtp} disabled={isSendingOtp} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border cursor-pointer border-primary text-sm rounded-full mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
                       {isSendingOtp ? 'Sending OTP...' : 'Send OTP'}
                     </button>
                   </>
@@ -175,7 +171,7 @@ const DoctorProfile = () => {
 
                     <button onClick={() => setShowPassword(!showPassword)} className="hover:bg-primary hover:text-white transition-all duration-200 border border-gray-300 rounded w-60 cursor-pointer py-1 text-gray-500">{showPassword ? "Hide" : "Show"}</button>
 
-                    <button onClick={handleVerifyOtpAndResetPassword} disabled={isResetting} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
+                    <button onClick={handleVerifyOtpAndResetPassword} disabled={isResetting} className='max-sm:text-xs w-60 max-sm:py-0.5 max-sm:px-4.5 px-4 py-2 border border-primary text-sm rounded-full cursor-pointer mt-2 hover:text-white hover:bg-primary transition-all disabled:opacity-60'>
                       {isResetting ? 'Verifying...' : 'Verify OTP & Update Password'}
                     </button>
                   </>

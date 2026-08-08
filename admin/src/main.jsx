@@ -16,6 +16,5 @@ createRoot(document.getElementById('root')).render(
         </AppContextProvider>
       </DoctorContextProvider>
     </AdminContextProvider>
-
   </BrowserRouter>,
 )

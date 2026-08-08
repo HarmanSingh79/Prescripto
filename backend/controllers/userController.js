@@ -68,6 +68,95 @@ const registerUser = async (req, res) => {
     }
 }
 
+// send OTP for forgot-password flow (no auth)
+const sendForgotOtp = async (req, res) => {
+    try {
+        const { email } = req.body
+        if (!email) {
+            return res.json({ success: true, message: "If this email is registered, an OTP has been sent" })
+        }
+
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            return res.json({ success: true, message: "If this email is registered, an OTP has been sent" })
+        }
+
+        const otp = String(Math.floor(100000 + Math.random() * 900000))
+        user.resetOtp = otp
+        user.resetOtpExpireAt = Date.now() + 10 * 60 * 1000
+        await user.save()
+
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: user.email,
+            subject: "Prescripto - Password Reset OTP",
+            text: `Your OTP for resetting your Prescripto user account password is ${otp}. It is valid for 10 minutes.`
+        }
+
+        await transporter.sendMail(mailOptions)
+
+        return res.json({ success: true, message: "If this email is registered, an OTP has been sent" })
+    } catch (error) {
+        console.log(error)
+        return res.json({ success: false, message: error.message })
+    }
+}
+
+
+// set password using forgot-password OTP (no auth)
+const setForgotPass = async (req, res) => {
+    try {
+        const { email, otp, newPassword } = req.body
+        if (!email || !otp || !newPassword) {
+            return res.json({ success: false, message: "Missing required fields" })
+        }
+
+        if (!validator.isStrongPassword(newPassword, {
+            minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
+        })) {
+            return res.json({ success: false, message: "New password is not strong enough" })
+        }
+
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            return res.json({ success: false, message: "Invalid email or OTP" })
+        }
+
+        if (!user.resetOtp || user.resetOtp !== otp) {
+            return res.json({ success: false, message: "Invalid OTP" })
+        }
+
+        if (user.resetOtpExpireAt < Date.now()) {
+            user.resetOtp = ''
+            user.resetOtpExpireAt = 0
+            await user.save()
+            return res.json({ success: false, message: "OTP has expired" })
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+        user.password = hashedPassword
+        user.resetOtp = ''
+        user.resetOtpExpireAt = 0
+        await user.save()
+
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: user.email,
+            subject: "Prescripto - Password Changed",
+            text: `Hey ${user.name}, your password for your user profile has been changed successfully!`
+        }
+
+        await transporter.sendMail(mailOptions)
+
+        return res.json({ success: true, message: "Password reset successfully" })
+    } catch (error) {
+        console.log(error)
+        return res.json({ success: false, message: error.message })
+    }
+}
+
 //api to verify otp sent to phone
 const verifyPhone = async (req, res) => {
     try {
@@ -410,4 +499,4 @@ const verifyRazorpay = async (req, res) => {
 }
 
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP, verifyPhone }
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP, verifyPhone, sendForgotOtp, setForgotPass }

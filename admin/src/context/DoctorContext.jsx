@@ -93,9 +93,9 @@ const DoctorContextProvider = (props) => {
         }
     }
 
-    const sendResetOtp = async (email) => {
+    const sendResetOtp = async (email, oldPassword) => {
         try {
-            const { data } = await axios.post(backendURL + '/api/doctor/send-reset-otp', { email }, { headers: { dToken } })
+            const { data } = await axios.post(backendURL + '/api/doctor/send-reset-otp', { email, oldPassword }, { headers: { dToken } })
             if (data.success) {
                 toast.success(data.message)
                 return true
@@ -125,6 +125,28 @@ const DoctorContextProvider = (props) => {
         }
     }
 
+    const sendForgotOtp = async (email) => {
+        try {
+            const { data } = await axios.post(backendURL + '/api/doctor/send-forgot-otp', { email })
+            data.success ? toast.success(data.message) : toast.error(data.message)
+            return data.success
+        } catch (error) {
+            toast.error(error.message)
+            return false
+        }
+    }
+    
+    const setForgotPass = async (email, otp, newPassword) => {
+        try {
+            const { data } = await axios.post(backendURL + '/api/doctor/set-password', { email, otp, newPassword })
+            data.success ? toast.success(data.message) : toast.error(data.message)
+            return data.success
+        } catch (error) {
+            toast.error(error.message)
+            return false
+        }
+    }
+
     const value = {
         dToken, setDToken,
         backendURL,
@@ -135,7 +157,8 @@ const DoctorContextProvider = (props) => {
         dashData, setDashData,
         getDashData,
         profileData, setProfileData,
-        getProfileData, sendResetOtp, resetPasswordWithOtp
+        getProfileData, sendResetOtp, resetPasswordWithOtp,
+        sendForgotOtp, setForgotPass
     }
 
     return (
