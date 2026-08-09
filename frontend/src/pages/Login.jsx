@@ -4,6 +4,9 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from "lucide-react"
+import SocialButton from '../components/SocialButton'
+import GoogleIcon from '../components/icons/GoogleIcon'
+import GithubIcon from '../components/icons/GithubIcon'
 
 const Login = () => {
 
@@ -23,7 +26,7 @@ const Login = () => {
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-  const { backendURL, token, setToken,sendForgotOtp, setForgotPass } = useContext(AppContext)
+  const { backendURL, token, setToken, sendForgotOtp, setForgotPass } = useContext(AppContext)
 
   const checks = {
     length: password.length >= 8,
@@ -96,7 +99,7 @@ const Login = () => {
 
 
   return (
-    <form onSubmit={onSubmitHandler} className='min-h-[80vh] items-center flex m-auto'>
+    <form onSubmit={onSubmitHandler} className='min-h-[80vh] items-center justify-center flex'>
       <div className='flex flex-col m-auto gap-3 items-start max-sm:p-6 p-8 min-w-85 sm:min-w-96 border rounded-xl text-zinc-600 shadow-lg'>
         <p className='text-2xl font-semibold'>{state === "Sign Up" ? "Create Account" : "Login"}</p>
         <p>Please {state === "Sign Up" ? "sign up" : "log in"} to book appointment</p>
@@ -123,7 +126,7 @@ const Login = () => {
 
         {
           state === "Sign Up"
-            ? <ul className="text-sm mt-1 space-y-0.5">
+            ? <ul className="text-xs grid grid-cols-2 mt-1 space-y-0.5 space-x-2.5">
               {Object.entries({
                 "At least 8 characters": checks.length,
                 "One lowercase letter": checks.lowercase,
@@ -186,6 +189,16 @@ const Login = () => {
         </div> */}
 
         <button type='submit' className='w-full bg-primary cursor-pointer text-white py-2 rounded-md text-base'>{state === "Sign Up" ? "Create Account" : "Login"}</button>
+
+        <p className='w-full text-center'>OR</p>
+
+        <div className="mx-auto">
+          <SocialButton onClick={() => window.location.href = `${backendURL}/api/user/google`} Icon={GoogleIcon}>Continue with Google</SocialButton>
+        </div>
+
+        <div className="mx-auto">
+          <SocialButton onClick={() => window.location.href = `${backendURL}/api/user/github`} Icon={GithubIcon}>Continue with Github</SocialButton>
+        </div>
 
         {
           state === "Sign Up" ?
