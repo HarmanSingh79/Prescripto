@@ -1,5 +1,5 @@
 import express from "express"
-import { registerUser,loginUser,getProfile, updateProfile, bookAppointment,sendForgotOtp, setForgotPass, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, sendVerifyOTP, verifyEmail, verifyPhone } from "../controllers/userController.js"
+import { registerUser,loginUser,getProfile, updateProfile,googleLogin, googleCallback, bookAppointment,sendForgotOtp, setForgotPass, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, sendVerifyOTP, verifyEmail, verifyPhone } from "../controllers/userController.js"
 import authUser from "../middlewares/authUser.js"
 import upload from "../middlewares/multer.js"
 
@@ -24,5 +24,9 @@ userRouter.post("/verify-account",authUser,verifyEmail)
 // public forgot-password endpoints
 userRouter.post("/send-forgot-otp", sendForgotOtp)
 userRouter.post("/set-password", setForgotPass)
+
+//routes for google login
+userRouter.get('/google',googleLogin)
+userRouter.get('/google/callback',googleCallback)
 
 export default userRouter

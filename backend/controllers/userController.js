@@ -8,8 +8,8 @@ import appointmentModel from '../models/appointmentModel.js'
 import razorpay from 'razorpay'
 import transporter from "../config/nodemailer.js"
 import { adminAuth } from '../config/firebaseAdmin.js'
+import axios from "axios"
 // import admin from '../config/firebaseAdmin.js'
-
 
 //checking the password strength
 const isStrongPassword = (password) => {
@@ -201,6 +201,10 @@ const loginUser = async (req, res) => {
 
         if (!user) {
             return res.json({ success: false, message: "User doesn't exist!" })
+        }
+
+        if (user.authProvider === 'google' && !user.password) {
+            return res.json({ success: false, message: "This account uses Google Sign-In. Please continue with Google." })
         }
 
         const match = await bcrypt.compare(password, user.password)
@@ -499,4 +503,91 @@ const verifyRazorpay = async (req, res) => {
 }
 
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP, verifyPhone, sendForgotOtp, setForgotPass }
+
+//google login
+
+//1.redirect user to Google's consent screen
+const googleLogin = (req, res) => {
+    const googleAuthURL = new URL('https://accounts.google.com/o/oauth2/v2/auth')
+    googleAuthURL.search = new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        response_type: 'code',
+        scope: 'openid email profile',
+        access_type: 'offline'
+    })
+
+    res.redirect(googleAuthURL.toString())
+}
+
+//2.Google redirects back here with a "code"
+const googleCallback = async (req, res) => {
+    try {
+        const { code } = req.query
+        if (!code) {
+            return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`)
+        }
+
+        const tokenRes = await axios.post(
+            'https://oauth2.googleapis.com/token',
+            new URLSearchParams({
+                code,
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+                grant_type: 'authorization_code'
+            }).toString(),
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        )
+
+        const { access_token } = tokenRes.data;
+
+        //fetching the user profile using access token
+        const profileRes = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', { headers: { Authorization: `Bearer ${access_token}` } })
+
+        const { email, name, picture } = profileRes.data;
+
+        //find or create user now
+        let user = await userModel.findOne({ email })
+        if (!user) {
+            user = new userModel({
+                name,
+                email,
+                image: picture || undefined,
+                authProvider: 'google',
+                isAccountVerified: true
+            })
+
+            await user.save();
+        } else {
+            let needsUpdate = false
+
+            if (!user.isAccountVerified) {
+                user.isAccountVerified = true
+                needsUpdate = true
+            }
+
+            if (picture) {
+                user.image = picture
+                needsUpdate = true
+            }
+
+            if (needsUpdate) {
+                await user.save()
+            }
+        }
+
+        //now assigning the jwt token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+
+        //redirect back to the frontend with the token
+        res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${token}`)
+
+    } catch (error) {
+        console.log(error)
+        res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`)
+    }
+}
+
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, verifyEmail, sendVerifyOTP, verifyPhone, sendForgotOtp, setForgotPass, googleLogin, googleCallback }

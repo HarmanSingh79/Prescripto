@@ -16,6 +16,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import { useContext, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { AppContext } from './context/AppContext'
+import OAuthSuccess from './pages/OAuthSuccess'
 
 const App = () => {
 
@@ -57,6 +58,7 @@ const App = () => {
         <Route path='/my-appointments' element={<MyAppointments />} />
         <Route path='/verify-email' element={<VerifyEmail />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
       </Routes>
       <Footer />
     </div>

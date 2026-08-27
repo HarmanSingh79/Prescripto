@@ -196,9 +196,9 @@ const Login = () => {
           <SocialButton onClick={() => window.location.href = `${backendURL}/api/user/google`} Icon={GoogleIcon}>Continue with Google</SocialButton>
         </div>
 
-        <div className="mx-auto">
+        {/* <div className="mx-auto">
           <SocialButton onClick={() => window.location.href = `${backendURL}/api/user/github`} Icon={GithubIcon}>Continue with Github</SocialButton>
-        </div>
+        </div> */}
 
         {
           state === "Sign Up" ?
