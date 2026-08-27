@@ -581,10 +581,14 @@ const googleCallback = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
 
         //redirect back to the frontend with the token
-        res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${token}`)
+        res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${encodeURIComponent(token)}`)
 
     } catch (error) {
-        console.log(error)
+        console.error('Google OAuth callback failed:', {
+            message: error.message,
+            status: error.response?.status,
+            response: error.response?.data
+        })
         res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`)
     }
 }

@@ -40,4 +40,8 @@ app.get('/',(req,res)=>{
 
 
 
-app.listen(port, ()=>console.log(`server is running on port ${port}`))
+if (!process.env.VERCEL) {
+  app.listen(port, ()=>console.log(`server is running on port ${port}`))
+}
+
+export default app
